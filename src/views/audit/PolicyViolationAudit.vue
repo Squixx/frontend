@@ -356,7 +356,9 @@ export default {
           formatter: (value, row, index) => {
             if (row.component) {
               let url = xssFilters.uriInUnQuotedAttr(
-                './components/' + row.component.uuid,
+                this.$router.resolve({
+                  path: `/component/${row.component.uuid}`,
+                }).href,
               );
               let name = common.concatenateComponentName(
                 null,
@@ -364,10 +366,9 @@ export default {
                 row.component.version,
               );
               let dependencyGraphUrl = xssFilters.uriInUnQuotedAttr(
-                './projects/' +
-                  row.project.uuid +
-                  '/dependencyGraph/' +
-                  row.component.uuid,
+                this.$router.resolve({
+                  path: `/projects/${row.project.uuid}/dependencyGraph/${row.component.uuid}`,
+                }).href,
               );
               return (
                 `<a href="${dependencyGraphUrl}"<i class="fa fa-sitemap" aria-hidden="true" style="float:right; padding-top: 4px; cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Show in dependency graph"></i></a> ` +
@@ -382,9 +383,11 @@ export default {
           title: this.$t('message.project_name'),
           field: 'project.name',
           sortable: true,
-          formatter(value, row, index) {
+          formatter: (value, row, index) => {
             let url = xssFilters.uriInUnQuotedAttr(
-              './projects/' + row.project.uuid,
+              this.$router.resolve({
+                path: `/project/${row.project.uuid}`,
+              }).href,
             );
             let name = common.concatenateComponentName(
               null,
@@ -421,15 +424,18 @@ export default {
           title: this.$t('message.license'),
           field: 'component.license',
           sortable: true,
-          formatter(value, row, index) {
+          formatter: (value, row, index) => {
             if (
               Object.prototype.hasOwnProperty.call(
                 row.component,
                 'resolvedLicense',
               )
             ) {
-              let licenseurl =
-                './licenses/' + row.component.resolvedLicense.licenseId;
+              let licenseurl = xssFilters.uriInUnQuotedAttr(
+                this.$router.resolve({
+                  path: `/license/${row.component.resolvedLicense.licenseId}`,
+                }).href,
+              );
               return (
                 '<a href="' +
                 licenseurl +

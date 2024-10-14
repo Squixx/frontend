@@ -37,8 +37,10 @@ export default {
           title: this.$t('message.name'),
           field: 'name',
           sortable: true,
-          formatter(value, row, index) {
-            let url = xssFilters.uriInUnQuotedAttr('./services/' + row.uuid);
+          formatter: (value, row, index) => {
+            let url = xssFilters.uriInUnQuotedAttr(
+              this.$router.resolve({}).href,
+            );
             return `<a href="${url}">${xssFilters.inHTMLData(value)}</a>`;
           },
         },

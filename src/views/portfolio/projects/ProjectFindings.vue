@@ -160,13 +160,14 @@ export default {
           sortable: true,
           formatter: (value, row, index) => {
             let url = xssFilters.uriInUnQuotedAttr(
-              './components/' + row.component.uuid,
+              this.$router.resolve({
+                path: `/components/${row.component.uuid}`,
+              }).href,
             );
             let dependencyGraphUrl = xssFilters.uriInUnQuotedAttr(
-              './projects/' +
-                this.uuid +
-                '/dependencyGraph/' +
-                row.component.uuid,
+              this.$router.resolve({
+                path: `/projects/${this.uuid}/dependencyGraph/${row.component.uuid}`,
+              }).href,
             );
             return (
               `<a href="${dependencyGraphUrl}"<i class="fa fa-sitemap" aria-hidden="true" style="float:right; padding-top: 4px; cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Show in dependency graph"></i></a> ` +
@@ -233,9 +234,11 @@ export default {
           title: this.$t('message.vulnerability'),
           field: 'vulnerability.vulnId',
           sortable: true,
-          formatter(value, row, index) {
+          formatter: (value, row, index) => {
             let url = xssFilters.uriInUnQuotedAttr(
-              './vulnerabilities/' + row.vulnerability.source + '/' + value,
+              this.$router.resolve({
+                path: `/vulnerabilities/${row.vulnerability.source}/${value}`,
+              }).href,
             );
             return (
               common.formatSourceLabel(row.vulnerability.source) +
@@ -247,7 +250,7 @@ export default {
           title: this.$t('message.aliases'),
           field: 'vulnerability.aliases',
           visible: false,
-          formatter(value, row, index) {
+          formatter: (value, row, index) => {
             if (typeof value !== 'undefined') {
               let label = '';
               const aliases = common.resolveVulnAliases(
@@ -257,7 +260,9 @@ export default {
               for (let i = 0; i < aliases.length; i++) {
                 let alias = aliases[i];
                 let url = xssFilters.uriInUnQuotedAttr(
-                  './vulnerabilities/' + alias.source + '/' + alias.vulnId,
+                  this.$router.resolve({
+                    path: `/vulnerabilities/${alias.source}/${alias.vulnId}`,
+                  }).href,
                 );
                 label +=
                   common.formatSourceLabel(alias.source) +

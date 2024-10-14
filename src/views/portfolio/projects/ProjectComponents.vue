@@ -168,9 +168,15 @@ export default {
           field: 'name',
           sortable: true,
           formatter: (value, row, index) => {
-            let url = xssFilters.uriInUnQuotedAttr('./components/' + row.uuid);
+            let url = xssFilters.uriInUnQuotedAttr(
+              this.$router.resolve({
+                path: `/components/${row.uuid}`,
+              }).href,
+            );
             let dependencyGraphUrl = xssFilters.uriInUnQuotedAttr(
-              './projects/' + this.uuid + '/dependencyGraph/' + row.uuid,
+              this.$router.resolve({
+                path: `/projects/${this.uuid}/dependencyGraph/${row.uuid}`,
+              }).href,
             );
             return (
               `<a href="${dependencyGraphUrl}"<i class="fa fa-sitemap" aria-hidden="true" style="float:right; padding-top: 4px; cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Show in dependency graph"></i></a> ` +
@@ -254,9 +260,11 @@ export default {
           title: this.$t('message.license'),
           field: 'license',
           sortable: false,
-          formatter(value, row, index) {
+          formatter: (value, row, index) => {
             if (Object.prototype.hasOwnProperty.call(row, 'resolvedLicense')) {
-              let licenseurl = './licenses/' + row.resolvedLicense.licenseId;
+              let licenseurl = this.$router.resolve({
+                path: `/licenses/${row.resolvedLicense.licenseId}`,
+              }).href;
               return (
                 '<a href="' +
                 licenseurl +

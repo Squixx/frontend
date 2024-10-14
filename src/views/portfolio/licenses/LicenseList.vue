@@ -68,9 +68,11 @@ export default {
           title: this.$t('message.spdx_license_id'),
           field: 'licenseId',
           sortable: true,
-          formatter: function (value, row, index) {
+          formatter: (value, row, index) => {
             let url = xssFilters.uriInUnQuotedAttr(
-              './licenses/' + encodeURIComponent(value),
+              this.$router.resolve({
+                path: `/licenses/${encodeURIComponent(value)}`,
+              }).href,
             );
             return `<a href="${url}">${xssFilters.inHTMLData(value)}</a>`;
           },

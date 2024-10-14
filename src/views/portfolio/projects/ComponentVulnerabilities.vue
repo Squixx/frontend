@@ -34,9 +34,11 @@ export default {
           title: this.$t('message.name'),
           field: 'vulnId',
           sortable: true,
-          formatter(value, row, index) {
+          formatter: (value, row, index) => {
             let url = xssFilters.uriInUnQuotedAttr(
-              './vulnerabilities/' + row.source + '/' + value,
+              this.$router.resolve({
+                path: `/vulnerabilities/${row.source}/${encodeURIComponent(value)}`,
+              }).href,
             );
             return (
               common.formatSourceLabel(row.source) +
@@ -48,14 +50,16 @@ export default {
           title: this.$t('message.aliases'),
           field: 'aliases',
           visible: false,
-          formatter(value, row, index) {
+          formatter: (value, row, index) => {
             if (typeof value !== 'undefined') {
               let label = '';
               const aliases = common.resolveVulnAliases(row.source, value);
               for (let i = 0; i < aliases.length; i++) {
                 let alias = aliases[i];
                 let url = xssFilters.uriInUnQuotedAttr(
-                  './vulnerabilities/' + alias.source + '/' + alias.vulnId,
+                  this.$router.resolve({
+                    path: `/vulnerabilities/${alias.source}/${alias.vulnId}`,
+                  }).href,
                 );
                 label +=
                   common.formatSourceLabel(alias.source) +
